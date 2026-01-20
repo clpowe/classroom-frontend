@@ -22,6 +22,7 @@ import Dashboard from "./pages/dashboard";
 import SubjectsList from "./pages/subjects/list";
 import SubjectsCreate from "./pages/subjects/create";
 import { Layout } from "./components/refine-ui/layout/layout";
+import Create from "./pages/subjects/create";
 
 
 function App() {
