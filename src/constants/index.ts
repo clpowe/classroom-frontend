@@ -47,7 +47,7 @@ export const DEPARTMENT_OPTIONS = DEPARTMENTS.map((dept) => ({
   label: dept,
 }));
 
-export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 3MB in bytes
+export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 export const ALLOWED_TYPES = [
   "image/png",
   "image/jpeg",

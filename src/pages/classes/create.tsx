@@ -5,20 +5,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useBack } from "@refinedev/core";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm } from "@refinedev/react-hook-form";
 import { classSchema } from "@/lib/schema";
 import * as z from "zod";
 
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -29,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import UploadWidget from "@/components/uplaod-widget";
+import { Loader2 } from "lucide-react";
 
 const teachers = [
   { id: 1, name: "Sarah Wilson" },
@@ -48,7 +47,7 @@ const Create = () => {
   const form = useForm({
     resolver: zodResolver(classSchema),
     refineCoreProps: {
-      resourse: "classes",
+      resource: "classes",
       action: "create",
     },
     defaultValues: {
@@ -72,7 +71,7 @@ const Create = () => {
 
   const bannerPubliicId = form.watch("bannerCldPubId");
 
-  function setBannerImage(file) {}
+  // function setBannerImage(file) {}
 
   return (
     <CreateView className="class-view">
@@ -117,7 +116,7 @@ const Create = () => {
                                 }
                               : null
                           }
-                          onChange={(file: unknown) => {
+                          onChange={(file) => {
                             if (file) {
                               field.onChange(file.url);
                               form.setValue("bannerCldPubId", file.publicId, {
@@ -126,7 +125,7 @@ const Create = () => {
                               });
                             } else {
                               field.onChange("");
-                              form.setValue("bannerCldPubId", file.publicId, {
+                              form.setValue("bannerCldPubId", "", {
                                 shouldValidate: true,
                                 shouldDirty: true,
                               });

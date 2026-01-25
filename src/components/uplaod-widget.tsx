@@ -4,13 +4,16 @@ import {
   CLOUDINARY_UPLOAD_PRESET,
   MAX_FILE_SIZE,
 } from "@/constants";
-import { UploadWidgetValue } from "@/types";
+import { UploadWidgetProps, UploadWidgetValue } from "@/types";
 import { Trash, UploadCloud } from "lucide-react";
-import { on } from "node:stream";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 
-const UploadWidget = ({ value = null, onChange, disabled = false }) => {
+const UploadWidget = ({
+  value = null,
+  onChange,
+  disabled = false,
+}: UploadWidgetProps) => {
   const widgetRef = useRef<CloudinaryWidget | null>(null);
   const onChangeRef = useRef(onChange);
 
@@ -42,7 +45,7 @@ const UploadWidget = ({ value = null, onChange, disabled = false }) => {
           multiple: false,
           folder: "uploads",
           maxFileSize: MAX_FILE_SIZE,
-          clientId: ALLOWED_TYPES,
+          clientAllowedFormats: ALLOWED_TYPES,
         },
         (error, result) => {
           if (!error && result.event === "success") {
