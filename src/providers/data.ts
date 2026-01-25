@@ -8,19 +8,33 @@ const options: CreateDataProviderOptions = {
     getEndpoint: ({ resource }) => resource,
 
     buildQueryParams: async ({ resource, pagination, filters }) => {
-      const page = pagination?.currentPage ?? 1;
-      const pageSize = pagination?.pageSize ?? 10;
+      const params: Record<string, string | number> = {};
 
-      const params: Record<string, string | number> = { page, limit: pageSize };
+      if (pagination?.mode !== "off") {
+        const page = pagination?.currentPage ?? 1;
+        const pageSize = pagination?.pageSize ?? 10;
+
+        params.page = page;
+        params.limit = pageSize;
+      }
 
       filters?.forEach((filter) => {
         const field = "field" in filter ? filter.field : "";
-
         const value = String(filter.value);
+
+        if (resource === "departments") {
+          if (field === "name" || field === "code") params.search = value;
+        }
 
         if (resource === "subjects") {
           if (field === "department") params.department = value;
-          if (field === "name" || field === "code") params.name = value;
+          if (field === "name" || field === "code") params.search = value;
+        }
+
+        if (resource === "classes") {
+          if (field === "name") params.search = value;
+          if (field === "subject") params.subject = value;
+          if (field === "teacher") params.teacher = value;
         }
       });
 
@@ -34,7 +48,7 @@ const options: CreateDataProviderOptions = {
     },
 
     getTotalCount: async (response) => {
-      const payload: ListResponse = await response.json();
+      const payload: ListResponse = await response.clone().json();
       return payload.pagination?.total ?? payload.data?.length ?? 0;
     },
   },
