@@ -1,9 +1,18 @@
+export type Department = {
+  id: number;
+  name: string;
+  code: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type Subject = {
   id: number;
   name: string;
   code: string;
   description: string;
-  department: string;
+  department: Department;
   createdAt?: string;
 };
 
@@ -87,12 +96,6 @@ export type Schedule = {
   day: string;
   startTime: string;
   endTime: string;
-};
-
-export type Department = {
-  id: number;
-  name: string;
-  description: string;
 };
 
 export type ClassDetails = {
