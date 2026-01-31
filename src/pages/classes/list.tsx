@@ -26,13 +26,14 @@ const ClassListPage = () => {
   const [selectedSubject, setSelectedSubject] = useState<string>("all");
   const [selectedTeacher, setSelectedTeacher] = useState<string>("all");
 
-  const { data: subjectsData } = useList<Subject>({
+  const { query: subjectsQuery } = useList<Subject>({
     resource: "subjects",
-    pagination: { mode: "off" },
+    pagination: {
+      pageSize: 100,
+    },
   });
-  const subjects = subjectsData?.data || [];
 
-  const { data: teachersData } = useList<User>({
+  const { query: teachersQuery } = useList<User>({
     resource: "users",
     filters: [
       {
@@ -41,9 +42,13 @@ const ClassListPage = () => {
         value: "teacher",
       },
     ],
-    pagination: { mode: "off" },
+    pagination: {
+      pageSize: 100,
+    },
   });
-  const teachers = teachersData?.data ?? [];
+
+  const subjects = subjectsQuery.data?.data || [];
+  const teachers = teachersQuery.data?.data || [];
 
   const columns = useMemo<ColumnDef<ClassDetails>[]>(
     () => [
@@ -168,7 +173,6 @@ const ClassListPage = () => {
   }, [searchQuery, selectedSubject, selectedTeacher]);
 
   const table = useTable<ClassDetails>({
-    resource: "classes",
     columns,
     refineCoreProps: {
       pagination: {
@@ -177,6 +181,14 @@ const ClassListPage = () => {
       },
       filters: {
         permanent: filters,
+      },
+      sorters: {
+        initial: [
+          {
+            field: "id",
+            order: "desc",
+          },
+        ],
       },
     },
   });
@@ -203,7 +215,7 @@ const ClassListPage = () => {
 
           <div className="flex gap-2 w-full sm:w-auto">
             <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-              <SelectTrigger className="w-[160px]">
+              <SelectTrigger className="w-40">
                 <SelectValue placeholder="All Subjects" />
               </SelectTrigger>
               <SelectContent>
@@ -217,7 +229,7 @@ const ClassListPage = () => {
             </Select>
 
             <Select value={selectedTeacher} onValueChange={setSelectedTeacher}>
-              <SelectTrigger className="w-[160px]">
+              <SelectTrigger className="w-40">
                 <SelectValue placeholder="All Teachers" />
               </SelectTrigger>
               <SelectContent>
