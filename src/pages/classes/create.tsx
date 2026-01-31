@@ -30,8 +30,6 @@ import UploadWidget from "@/components/uplaod-widget";
 import { Loader2 } from "lucide-react";
 import { Subject, User } from "@/types";
 
-
-
 const Create = () => {
   const back = useBack();
 
@@ -79,18 +77,17 @@ const Create = () => {
         field: "role",
         operator: "eq",
         value: "teacher",
-      }
+      },
     ],
     pagination: {
       pageSize: 100,
     },
   });
 
-  const subjects = subjectsQuery.data?.data || [];
+  const subjects = subjectsQuery.data?.data ?? [];
   const subjectsLoading = subjectsQuery.isLoading;
-  const teachers = teachersQuery.data?.data || [];
+  const teachers = teachersQuery.data?.data ?? [];
   const teachersLoading = teachersQuery.isLoading;
-
 
   return (
     <CreateView className="class-view">
@@ -130,9 +127,9 @@ const Create = () => {
                           value={
                             field.value
                               ? {
-                                url: field.value,
-                                publicId: bannerPubliicId ?? "",
-                              }
+                                  url: field.value,
+                                  publicId: bannerPubliicId ?? "",
+                                }
                               : null
                           }
                           onChange={(file) => {
@@ -229,7 +226,7 @@ const Create = () => {
                         <Select
                           onValueChange={field.onChange}
                           value={field.value?.toString()}
-                        // disabled={teachersLoading}
+                          // disabled={teachersLoading}
                         >
                           <FormControl>
                             <SelectTrigger className="w-full">

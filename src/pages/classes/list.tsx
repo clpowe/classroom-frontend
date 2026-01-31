@@ -43,7 +43,7 @@ const ClassListPage = () => {
     ],
     pagination: { mode: "off" },
   });
-  const teachers = teachersData?.data || [];
+  const teachers = teachersData?.data ?? [];
 
   const columns = useMemo<ColumnDef<ClassDetails>[]>(
     () => [
@@ -71,7 +71,9 @@ const ClassListPage = () => {
         size: 200,
         header: () => <p className="column-title">Class Name</p>,
         cell: ({ getValue }) => (
-          <span className="font-medium text-foreground">{getValue<string>()}</span>
+          <span className="font-medium text-foreground">
+            {getValue<string>()}
+          </span>
         ),
       },
       {
@@ -94,7 +96,9 @@ const ClassListPage = () => {
         size: 150,
         header: () => <p className="column-title">Subject</p>,
         cell: ({ getValue }) => (
-          <span className="text-muted-foreground">{getValue<Subject>()?.name}</span>
+          <span className="text-muted-foreground">
+            {getValue<Subject>()?.name}
+          </span>
         ),
       },
       {
@@ -103,7 +107,9 @@ const ClassListPage = () => {
         size: 150,
         header: () => <p className="column-title">Teacher</p>,
         cell: ({ getValue }) => (
-          <span className="text-muted-foreground">{getValue<User>()?.name}</span>
+          <span className="text-muted-foreground">
+            {getValue<User>()?.name}
+          </span>
         ),
       },
       {
