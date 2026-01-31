@@ -3,7 +3,7 @@ import { CreateView } from "@/components/refine-ui/views/create-view";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useBack } from "@refinedev/core";
+import { useBack, useList } from "@refinedev/core";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "@refinedev/react-hook-form";
 import { classSchema } from "@/lib/schema";
@@ -28,18 +28,9 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import UploadWidget from "@/components/uplaod-widget";
 import { Loader2 } from "lucide-react";
+import { Subject, User } from "@/types";
 
-const teachers = [
-  { id: 1, name: "Sarah Wilson" },
-  { id: 2, name: "James Rodriguez" },
-  { id: 3, name: "Emily Chen" },
-];
 
-const subjects = [
-  { id: 1, name: "Mathematics", code: "MATH" },
-  { id: 2, name: "Physics", code: "PHY" },
-  { id: 3, name: "Chemistry", code: "CHEM" },
-];
 
 const Create = () => {
   const back = useBack();
@@ -56,14 +47,15 @@ const Create = () => {
   });
 
   const {
+    refineCore: { onFinish },
     handleSubmit,
     formState: { isSubmitting, errors },
     control,
   } = form;
 
-  function onSubmit(values: z.infer<typeof classSchema>) {
+  async function onSubmit(values: z.infer<typeof classSchema>) {
     try {
-      console.log(values);
+      await onFinish(values);
     } catch (e) {
       console.log("Error creating new classes", e);
     }
@@ -72,6 +64,33 @@ const Create = () => {
   const bannerPubliicId = form.watch("bannerCldPubId");
 
   // function setBannerImage(file) {}
+
+  const { query: subjectsQuery } = useList<Subject>({
+    resource: "subjects",
+    pagination: {
+      pageSize: 100,
+    },
+  });
+
+  const { query: teachersQuery } = useList<User>({
+    resource: "users",
+    filters: [
+      {
+        field: "role",
+        operator: "eq",
+        value: "teacher",
+      }
+    ],
+    pagination: {
+      pageSize: 100,
+    },
+  });
+
+  const subjects = subjectsQuery.data?.data || [];
+  const subjectsLoading = subjectsQuery.isLoading;
+  const teachers = teachersQuery.data?.data || [];
+  const teachersLoading = teachersQuery.isLoading;
+
 
   return (
     <CreateView className="class-view">
@@ -111,9 +130,9 @@ const Create = () => {
                           value={
                             field.value
                               ? {
-                                  url: field.value,
-                                  publicId: bannerPubliicId ?? "",
-                                }
+                                url: field.value,
+                                publicId: bannerPubliicId ?? "",
+                              }
                               : null
                           }
                           onChange={(file) => {
@@ -176,7 +195,7 @@ const Create = () => {
                             field.onChange(Number(value))
                           }
                           value={field.value?.toString()}
-                          // disabled={subjectsLoading}
+                          disabled={subjectsLoading}
                         >
                           <FormControl>
                             <SelectTrigger className="w-full">
@@ -210,7 +229,7 @@ const Create = () => {
                         <Select
                           onValueChange={field.onChange}
                           value={field.value?.toString()}
-                          // disabled={teachersLoading}
+                        // disabled={teachersLoading}
                         >
                           <FormControl>
                             <SelectTrigger className="w-full">
@@ -274,6 +293,7 @@ const Create = () => {
                         <Select
                           onValueChange={field.onChange}
                           value={field.value}
+                          disabled={teachersLoading}
                         >
                           <FormControl>
                             <SelectTrigger className="w-full">
