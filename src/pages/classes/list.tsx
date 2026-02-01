@@ -125,9 +125,9 @@ const ClassListPage = () => {
         cell: ({ getValue }) => <span>{getValue<number>()}</span>,
       },
       {
-        id: "actions",
-        size: 100,
-        header: () => <p className="column-title">Actions</p>,
+        id: "details",
+        size: 140,
+        header: () => <p className="column-title">Details</p>,
         cell: ({ row }) => (
           <ShowButton
             resource="classes"
@@ -135,7 +135,7 @@ const ClassListPage = () => {
             variant="outline"
             size="sm"
           >
-            Details
+            View
           </ShowButton>
         ),
       },
@@ -175,6 +175,7 @@ const ClassListPage = () => {
   const table = useTable<ClassDetails>({
     columns,
     refineCoreProps: {
+      resource: "classes",
       pagination: {
         pageSize: 10,
         mode: "server",
@@ -199,7 +200,7 @@ const ClassListPage = () => {
       <h1 className="page-title">Classes</h1>
 
       <div className="intro-row">
-        <p>Manage your classes, subjects, and teacher assignments.</p>
+        <p>Quick access to essential metrics and management tools.</p>
 
         <div className="actions-row">
           <div className="search-field">
@@ -215,8 +216,8 @@ const ClassListPage = () => {
 
           <div className="flex gap-2 w-full sm:w-auto">
             <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="All Subjects" />
+              <SelectTrigger className="">
+                <SelectValue placeholder="Filter by subject" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Subjects</SelectItem>
@@ -229,8 +230,8 @@ const ClassListPage = () => {
             </Select>
 
             <Select value={selectedTeacher} onValueChange={setSelectedTeacher}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="All Teachers" />
+              <SelectTrigger className="">
+                <SelectValue placeholder="Filter by teacher" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Teachers</SelectItem>
